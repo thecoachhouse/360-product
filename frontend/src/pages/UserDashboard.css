@@ -1,0 +1,70 @@
+.assessments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.assessment-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s;
+}
+
+.assessment-card:hover {
+  border-color: #adb5bd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.assessment-info {
+  flex: 1;
+}
+
+.assessment-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 8px;
+}
+
+.assessment-details {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.assessment-coachee,
+.assessment-due {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.assessment-coachee svg,
+.assessment-due svg {
+  width: 16px;
+  height: 16px;
+}
+
+.start-assessment-button {
+  padding: 10px 24px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.start-assessment-button:hover {
+  background-color: #0b5ed7;
+}
+
