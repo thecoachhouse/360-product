@@ -1,0 +1,616 @@
+# Coaching Assessment Platform – Product Requirements Document
+
+## Project Overview
+
+**Product Name:** Turning Point 360 Coaching Assessment Platform  
+**Version:** 1.0 (MVP)  
+**Target Launch:** Q4 2025  
+**Project Type:** Web Application
+
+### Purpose
+A modern coaching assessment platform designed to digitize and automate the 360° feedback process for a professional development program called Turning Point. The platform replaces manual coordination, scattered survey tools, and report generation with a secure, web-based workflow that lets admins, coachees, and nominees perform their roles efficiently.
+
+### Target Audience
+- **Primary:** Staff at The Coach House managing Turning Point professional development programs
+- **Secondary:** Coachees participating in Turning Point 360° feedback assessments
+- **Tertiary:** Nominees providing peer feedback on coachees
+
+### Success Metrics
+- Reduce assessment cycle time by 60% compared to manual processes
+- 90%+ completion rate for invited nominees
+- Admin time spent on coordination reduced by 75%
+- Zero data security incidents
+
+## User Types & Roles
+
+### Admin
+**Description:** Manages the platform, configures assessments, and oversees the entire workflow.
+
+**Key Responsibilities:**
+- Upload and manage coachee lists
+- Configure assessment parameters
+- Track participation and completion status
+- Send reminders to participants
+- Initiate report generation
+- Manage organization structure and relationships
+- Trigger AI summaries for qualitative feedback
+
+**Access Level:** Full platform access via role-gated dashboard
+
+### Coachee
+**Description:** Pre-loaded participants who complete self-assessments and nominate peer reviewers.
+
+**Key Responsibilities:**
+- Complete self-assessment questionnaire
+- Nominate peer reviewers (nominees)
+- Receive final reports (admin-initiated)
+
+**Access Level:** Authenticated access to personal assessment workflow
+
+### Nominee
+**Description:** Peer reviewers invited by coachees to provide 360° feedback.
+
+**Key Responsibilities:**
+- Complete peer assessment for assigned coachee(s)
+- Provide honest, constructive feedback
+
+**Access Level:** Secure, link-based access to specific assessment(s) only; no persistent account or dashboard access
+
+## Core Features & Requirements
+
+### 1. Authentication & User Management
+
+#### 1.1 Supabase Authentication
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Implement Supabase Auth for secure login
+- Support email/password authentication for admins
+- Implement magic link or passwordless authentication for coachees
+- Enable secure, token-based access for nominees (no account creation)
+- Role-based access control (RBAC) with three distinct roles: Admin, Coachee, Nominee
+
+**User Stories:**
+- As an Admin, I want to log in securely with email/password so I can manage the platform
+- As a Coachee, I want to log in with a magic link so I can access my assessment without managing passwords
+- As a Nominee, I want to access my assigned assessment via a secure link without creating an account
+
+#### 1.2 User Onboarding
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Admin can bulk upload coachees via CSV or form
+- System validates coachee data (name, email, organization details)
+- Automated welcome emails sent to coachees upon loading
+- Nominees dynamically onboarded via nomination workflow
+- All onboarding emails triggered via n8n
+
+**Acceptance Criteria:**
+- Coachee upload supports CSV with columns: name, email, department, manager
+- Validation prevents duplicate emails
+- Welcome emails include secure login links
+- Nominee invites sent within 5 minutes of nomination
+
+### 2. Assessment Workflow
+
+#### 2.1 Self-Assessment
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Coachee dashboard shows assessment status and progress
+- Embedded assessment form (open-source or SaaS widget, not custom-built)
+- Progress saving (allow partial completion)
+- Submission confirmation and timestamp
+- Response data sent to Supabase via n8n
+
+**User Stories:**
+- As a Coachee, I want to complete my self-assessment in one or multiple sessions
+- As a Coachee, I want to see my progress and know when I've completed all required sections
+- As an Admin, I want to track which coachees have completed their self-assessments
+
+#### 2.2 Nominee Selection
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Coachee can nominate 5-10 peer reviewers (configurable by admin)
+- Form captures nominee name, email, and relationship (e.g., peer, direct report, manager)
+- Validation prevents duplicate nominees
+- Submission triggers automated nominee invites via n8n
+- Coachee cannot see nominee response status or content
+
+**Acceptance Criteria:**
+- Nomination form validates email format
+- System prevents nominating the same person twice
+- Invite emails sent within 5 minutes of nomination
+- Coachee receives confirmation of submitted nominations
+
+#### 2.3 Peer Assessment (Nominee View)
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Nominees receive email with secure, single-use assessment link
+- Link directs to embedded assessment form pre-populated with coachee name
+- Form identical to self-assessment (consistent competency framework)
+- Anonymous submission (nominee identity not revealed to coachee)
+- Response data routed via n8n to Supabase and Google Sheets
+
+**User Stories:**
+- As a Nominee, I want to access the assessment directly from the email link
+- As a Nominee, I want my feedback to remain anonymous to the coachee
+- As an Admin, I want to track completion rates for each coachee's nominees
+
+### 3. Data Capture & Calculation
+
+#### 3.1 Response Storage
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- All assessment responses stored in Supabase with proper relational structure
+- n8n webhook receives form submissions and routes to:
+  - Supabase (raw data storage)
+  - Google Sheets (calculation and aggregation)
+- Data normalized and linked to user/assessment IDs
+- Timestamps recorded for all submissions
+
+**Data Schema (Supabase):**
+- `users` table: user_id, email, name, role, organization_id
+- `assessments` table: assessment_id, coachee_id, status, created_at
+- `responses` table: response_id, assessment_id, respondent_id, question_id, answer, timestamp
+- `nominations` table: nomination_id, coachee_id, nominee_email, status, invited_at, completed_at
+
+#### 3.2 Scoring & Aggregation
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Google Sheets receives response data from n8n
+- Reuse existing scoring formulae (current 360° logic)
+- Calculate competency scores, pillar averages, and overall ratings
+- Map qualitative responses to themes
+- Sheet structure supports per-coachee tabs for analysis
+
+**Acceptance Criteria:**
+- Scores automatically calculated upon data ingestion
+- Sheet formulas match current manual process logic
+- Results available for report generation within 10 minutes of final response
+
+#### 3.3 AI Summary Generation
+**Priority:** P1 (High)
+
+**Requirements:**
+- Admin can trigger AI summary for qualitative text responses
+- AI prompt managed at Google Sheets level (configurable)
+- Summary generated via AI API call (OpenAI, Anthropic, or similar)
+- Results written back to Google Sheets for report inclusion
+- Admin approves or edits AI summary before report finalization
+
+**User Stories:**
+- As an Admin, I want to generate AI summaries for open-text feedback to save time
+- As an Admin, I want to review and edit AI-generated summaries before including them in reports
+
+### 4. Admin Dashboard
+
+#### 4.1 Dashboard Overview
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Central dashboard accessible only to Admin role
+- Real-time status of all active assessments
+- Coachee list with completion indicators (self-assessment, nominations, peer responses)
+- Quick actions: send reminders, generate reports, view details
+
+**Dashboard Sections:**
+1. **Coachee Management**
+   - Upload/import coachees
+   - View coachee list with status indicators
+   - Edit coachee details
+
+2. **Assessment Progress Tracking**
+   - Visual progress bars or status badges
+   - Filter by status (not started, in progress, complete)
+   - Drill-down to individual coachee details
+
+3. **Nomination & Response Tracking**
+   - See outstanding nominations per coachee
+   - Identify nominees who haven't responded
+   - Send targeted reminders
+
+4. **Report Management**
+   - Initiate report generation for completed assessments
+   - View report generation status
+   - Access download links for finalized reports
+
+5. **Organization Structure**
+   - Upload org charts (CSV or visual)
+   - Map reporting relationships
+   - Configure competency frameworks
+
+#### 4.2 Reminder System
+**Priority:** P1 (High)
+
+**Requirements:**
+- Admin can send manual reminders to:
+  - Coachees who haven't completed self-assessments
+  - Nominees who haven't completed peer assessments
+- Automated reminder schedule (configurable):
+  - 3 days after invite
+  - 1 day before deadline (if set)
+- Reminder emails triggered via n8n
+- Track reminder history
+
+**Acceptance Criteria:**
+- Reminder emails personalized with recipient name and coachee name
+- Admin can preview reminder content before sending
+- System prevents duplicate reminders within 24 hours
+
+### 5. Notification System
+
+#### 5.1 Email Notifications
+**Priority:** P0 (Critical)
+
+**Requirements:**
+All notifications powered by n8n workflows:
+
+**Notification Types:**
+1. **Coachee Welcome Email**
+   - Trigger: Admin uploads coachee
+   - Content: Welcome message, login link, instructions
+
+2. **Self-Assessment Invite**
+   - Trigger: Coachee account activated
+   - Content: Assessment instructions, deadline, login link
+
+3. **Nominee Invite**
+   - Trigger: Coachee submits nominations
+   - Content: Request for feedback, coachee name, assessment link, deadline
+
+4. **Nominee Reminder**
+   - Trigger: Admin action or automated schedule
+   - Content: Friendly reminder, assessment link, deadline
+
+5. **Assessment Complete Confirmation**
+   - Trigger: Coachee or nominee submits assessment
+   - Content: Thank you message, next steps
+
+6. **Report Ready Notification**
+   - Trigger: Admin finalizes report
+   - Content: Report ready message, download link (admin only for MVP)
+
+**Email Requirements:**
+- Professional, branded templates
+- Personalized recipient names
+- Clear call-to-action buttons
+- Mobile-responsive design
+- Unsubscribe links where legally required
+
+### 6. Reporting & Data Export
+
+#### 6.1 Report Generation
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Admin initiates report generation for individual coachees
+- n8n orchestrates report workflow:
+  1. Gathers data from Google Sheets
+  2. Calls Carbone API for dynamic chart generation
+  3. Populates PDF template with data and charts
+  4. Stores final PDF in Google Drive
+  5. Returns download link to dashboard
+- Report includes:
+  - Overall scores and competency breakdown
+  - Self vs. peer comparison charts
+  - Anonymous qualitative feedback summaries
+  - AI-generated insights (if enabled)
+
+**Chart Types (via Carbone):**
+- Radar charts (competency scores)
+- Horizontal bar charts (pillar comparisons)
+- Grouped bar charts (self vs. others)
+
+**Acceptance Criteria:**
+- Report generation completes within 2 minutes
+- PDF is branded and professionally formatted
+- Charts accurately reflect Google Sheets calculations
+- All data anonymized (no individual nominee attribution)
+
+#### 6.2 Data Export (Admin)
+**Priority:** P2 (Nice-to-have)
+
+**Requirements:**
+- Admin can export raw data to CSV
+- Export options:
+  - All responses for a specific assessment
+  - Aggregate data across multiple assessments
+  - Nomination and completion tracking data
+- Exported data excludes PII unless explicitly authorized
+
+### 7. Security & Privacy
+
+#### 7.1 Data Security
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- All data stored in Supabase with encryption at rest
+- HTTPS/TLS for all data in transit
+- Supabase Row-Level Security (RLS) policies enforced:
+  - Admins: full access to all data
+  - Coachees: access only to own assessment data
+  - Nominees: access only to assigned assessment link (no database access)
+- Secure token-based links for nominees (single-use or time-limited)
+- No direct access to backend data stores, Google Sheets, or Drive for end users
+
+**Acceptance Criteria:**
+- RLS policies tested and verified
+- Nominee links expire after 30 days or after use (configurable)
+- Penetration testing confirms no unauthorized access vectors
+
+#### 7.2 Privacy & Anonymization
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Nominee responses anonymized in all reports
+- Coachees cannot view individual nominee responses
+- Admin can view raw data but reports maintain anonymity
+- PII minimized in all data stores
+- Compliance with GDPR/CCPA (data retention, deletion policies)
+
+**User Stories:**
+- As a Nominee, I want my feedback to be anonymous so I can be honest
+- As a Coachee, I want to trust the process knowing my peers' identities are protected
+- As an Admin, I want to ensure the platform meets legal compliance standards
+
+#### 7.3 Access Control
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Role-based access enforced at API and UI levels
+- Admin dashboard inaccessible to non-admin roles
+- Coachees cannot access other coachees' data
+- Nominees cannot access platform beyond assigned assessment
+- Session timeouts and secure logout
+
+### 8. Technical Architecture
+
+#### 8.1 Frontend
+**Priority:** P0 (Critical)
+
+**Technology Stack:**
+- React-based low-code platform (Cursor, Lovable, or equivalent)
+- Responsive design (mobile and desktop)
+- Component library (e.g., Material-UI, Shadcn, or similar)
+
+**Key Pages/Views:**
+1. Admin Dashboard
+2. Coachee Dashboard (self-assessment + nomination)
+3. Nominee Assessment View (embedded form)
+4. Login/Auth pages
+
+**Requirements:**
+- Accessible (WCAG 2.1 Level AA)
+- Fast page loads (<2 seconds)
+- Intuitive navigation and clear CTAs
+
+#### 8.2 Backend & Automations
+**Priority:** P0 (Critical)
+
+**Technology Stack:**
+- Supabase: Authentication, user management, response data storage
+- n8n: All workflow automations, email triggers, data routing, report orchestration
+- Google Sheets: Scoring, calculation, aggregation (reuse existing formulas)
+- Carbone: Dynamic chart generation for reports
+- Google Drive: PDF report storage
+
+**n8n Workflows Required:**
+1. Coachee onboarding and welcome emails
+2. Self-assessment submission routing
+3. Nominee invite generation and delivery
+4. Peer assessment submission routing
+5. Reminder email scheduling
+6. Report generation orchestration
+7. AI summary API integration
+
+**Acceptance Criteria:**
+- n8n workflows are modular and reusable
+- Error handling and retry logic for failed emails
+- Logging and monitoring for all workflows
+
+#### 8.3 Assessment Forms
+**Priority:** P0 (Critical)
+
+**Requirements:**
+- Embedded open-source or SaaS survey widget (e.g., Typeform, Google Forms alternative, or custom iframe)
+- Consistent form structure for self and peer assessments
+- Support for:
+  - Multiple choice (Likert scale)
+  - Open-text responses
+  - Conditional logic (if needed)
+- Form responses submitted via webhook to n8n
+
+**Acceptance Criteria:**
+- Form loads within 2 seconds
+- Mobile-friendly and accessible
+- Integration tested with n8n webhook
+
+### 9. MVP Scope & Constraints
+
+#### In Scope
+- Single-organization deployment (no multi-tenancy)
+- Admin, Coachee, Nominee roles
+- Self-assessment and peer nomination workflow
+- Embedded assessment forms
+- Automated notifications via n8n
+- Google Sheets-based scoring and calculation
+- PDF report generation with Carbone
+- Admin dashboard for management and reporting
+- Basic security and anonymization
+
+#### Out of Scope (Future Phases)
+- Multi-organization/multi-tenant support
+- Custom assessment builder or advanced logic
+- HRIS/LMS integrations
+- Real-time analytics dashboards
+- Nominee persistent accounts or activity history
+- Advanced reporting (e.g., trends over time, benchmarking)
+- Mobile native apps
+- Self-service report download for coachees/nominees
+
+### 10. Non-Functional Requirements
+
+#### Performance
+- Page load times: <2 seconds
+- Report generation: <2 minutes
+- Support for up to 500 concurrent users (MVP scale)
+
+#### Scalability
+- Architecture supports scaling to 5,000+ users in future
+- Database design normalized for efficient querying
+- n8n workflows optimized for high throughput
+
+#### Reliability
+- 99.5% uptime SLA
+- Automated backups (Supabase, Google Sheets)
+- Disaster recovery plan documented
+
+#### Usability
+- Intuitive UI requiring minimal training
+- Clear error messages and help text
+- Support for common browsers (Chrome, Firefox, Safari, Edge)
+
+#### Maintainability
+- Well-documented codebase
+- Modular architecture for easy updates
+- Version control (Git) for all code and configurations
+
+### 11. Success Criteria & KPIs
+
+**Launch Success Metrics:**
+- Platform launched and stable within 12 weeks
+- Zero critical security vulnerabilities
+- 95%+ feature completeness (all P0 features)
+
+**User Adoption Metrics:**
+- 90%+ coachee completion rate
+- 85%+ nominee response rate
+- Admin time savings: 75% reduction vs. manual process
+
+**Technical Metrics:**
+- <2 second page load times
+- <5 minute notification delivery times
+- 99.5% uptime
+
+**Business Impact:**
+- Assessment cycle time reduced by 60%
+- Positive user feedback (NPS >40)
+- Zero data security incidents
+
+### 12. Risks & Mitigations
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| Supabase service outage | High | Low | Implement automated backups, have rollback plan |
+| Low nominee response rates | High | Medium | Clear communication, reminders, deadline extensions |
+| n8n workflow failures | Medium | Medium | Robust error handling, monitoring, manual fallback |
+| Data security breach | Critical | Low | Penetration testing, RLS enforcement, security audits |
+| Scope creep | Medium | High | Strict MVP scope, prioritize P0 features only |
+| Integration complexity (Carbone, Sheets) | Medium | Medium | Early prototyping, thorough testing, documentation |
+
+### 13. Timeline & Milestones
+
+**Phase 1: Foundation (Weeks 1-3)**
+- Supabase setup (auth, database schema)
+- n8n installation and basic workflows
+- Frontend scaffold and routing
+
+**Phase 2: Core Workflows (Weeks 4-7)**
+- Self-assessment flow
+- Nomination and peer assessment flow
+- Data routing and storage
+- Email notifications
+
+**Phase 3: Admin Dashboard (Weeks 8-9)**
+- Dashboard UI
+- Progress tracking
+- Reminder system
+
+**Phase 4: Reporting (Weeks 10-11)**
+- Google Sheets integration
+- Carbone report generation
+- PDF storage and links
+
+**Phase 5: Testing & Launch (Week 12)**
+- End-to-end testing
+- Security audit
+- User acceptance testing
+- Production deployment
+
+### 14. Open Questions & Assumptions
+
+**Assumptions:**
+- Google Sheets formulas are already validated and working
+- Carbone can generate all required chart types
+- Supabase free/paid tier sufficient for MVP scale
+- n8n hosted instance or self-hosted available
+
+**Open Questions:**
+- Specific competency framework and question set finalized?
+- Deadline enforcement: hard deadlines or flexible?
+- Report distribution: email attachment or download link?
+- AI summary provider: OpenAI, Anthropic, or other?
+- Branding assets (logo, colors, email templates) ready?
+
+---
+
+## Appendix
+
+### User Personas
+
+**Persona 1: Sarah - The Coach House Program Administrator**
+- Role: Manages Turning Point 360° assessments for coaching clients
+- Pain Points: Manual coordination, chasing incomplete responses, report generation delays
+- Goals: Automate workflows, reduce admin time, improve completion rates
+
+**Persona 2: John - Coachee (Mid-Level Manager)**
+- Role: Participating in leadership development program
+- Pain Points: Unclear process, difficulty tracking progress, concerns about anonymity
+- Goals: Complete assessment efficiently, trust the process, receive actionable feedback
+
+**Persona 3: Maria - Nominee (Peer Reviewer)**
+- Role: Invited to provide feedback on colleague
+- Pain Points: Too many emails, unclear expectations, time constraints
+- Goals: Provide honest feedback quickly, ensure anonymity, minimal friction
+
+### Technical Dependencies
+
+**External Services:**
+- Supabase (Authentication, Database, Storage)
+- n8n (Workflow Automation)
+- Google Sheets (Storage and data calculation)
+- Carbone API (Report Generation)
+- Google Drive API (PDF Storage)
+- Email Service (Gmail inside n8n)
+- AI API (Gemini in Sheets app called GPT for Sheets)
+
+**Development Tools:**
+- React Framework (Next.js, Vite, or similar)
+- TypeScript
+- Git/GitHub
+- CI/CD pipeline (GitHub Actions, Vercel, or similar)
+
+### Glossary
+
+- **360° Feedback:** Multi-source assessment where an individual receives feedback from supervisors, peers, and direct reports
+- **Coachee:** Individual participating in the assessment and receiving feedback
+- **Nominee:** Peer invited to provide feedback on a coachee
+- **Self-Assessment:** Individual's own evaluation of their competencies
+- **Peer Assessment:** Evaluation of a coachee by their nominated peers
+- **Competency Framework:** Structured set of skills and behaviors being assessed
+- **Pillar:** High-level category grouping related competencies (e.g., Leadership, Communication)
+- **RLS (Row-Level Security):** Database security mechanism restricting data access based on user role
+- **Magic Link:** Passwordless authentication method using a secure email link
+
+---
+
+**Document Version:** 1.0  
+**Last Updated:** Oct 13 2025  
+**Author:** Project Team  
+**Approved By:** Kieran
+

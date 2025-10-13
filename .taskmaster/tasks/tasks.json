@@ -1,0 +1,243 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 19,
+        "title": "Setup Project Repository",
+        "description": "Create a new Git repository for the project and initialize it with a basic structure for code organization.",
+        "details": "Use GitHub or similar platforms to create a new repository. Initialize the repository with a README file, a .gitignore file, and a basic directory structure for frontend and backend code.",
+        "testStrategy": "Verify repository creation and initial commit.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 20,
+        "title": "Configure Supabase for Authentication and Database",
+        "description": "Set up Supabase for user authentication and data storage.",
+        "details": "Create a new Supabase instance and configure authentication with email/password for admins and magic links for coachees. Define database schema for users, assessments, and responses.",
+        "testStrategy": "Test authentication flows and database schema integrity.",
+        "priority": "high",
+        "dependencies": [
+          19
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 21,
+        "title": "Implement n8n for Workflow Automation",
+        "description": "Install and configure n8n for automating workflows such as email notifications and data routing.",
+        "details": "Set up an n8n instance and create workflows for coachee onboarding, self-assessment submission, nominee invites, and report generation.",
+        "testStrategy": "Verify workflow execution and error handling.",
+        "priority": "high",
+        "dependencies": [
+          20
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 22,
+        "title": "Develop Frontend with React",
+        "description": "Create the frontend using a React-based framework for the admin dashboard, coachee dashboard, and nominee assessment view.",
+        "details": "Use a low-code platform like Cursor or Lovable. Implement responsive design and accessibility features.\n<info added on 2025-10-13T10:23:13.642Z>\nCompleted initial frontend development:\n- Developed admin portal with login, dashboard, persistent navbar, and left sidebar.\n- Built user portal with login, assessment dashboard, and integrated SurveyJS for embedded 360° assessments.\n- Implemented routing for admin (/admin/*) and user (/user/*) flows.\n- Added 5 dummy assessment entries in the user dashboard, displaying assessment name, coachee name, and due date.\n- All pages feature a minimalist design with #f8f9fa background and white panels.\n- Sticky navbar includes a profile dropdown with Profile and Logout options.\n- Assessment list uses a clean card-based layout.\n- Frontend is ready for Supabase authentication integration.\n- Tech stack: React 18, Vite, React Router DOM, SurveyJS (survey-react-ui), and vanilla CSS.\n</info added on 2025-10-13T10:23:13.642Z>",
+        "testStrategy": "Conduct UI testing for accessibility and responsiveness.",
+        "priority": "high",
+        "dependencies": [
+          20
+        ],
+        "status": "in-progress",
+        "subtasks": []
+      },
+      {
+        "id": 23,
+        "title": "Integrate Embedded Assessment Forms",
+        "description": "Embed open-source or SaaS survey widgets for self and peer assessments.",
+        "details": "Use Typeform or similar tools. Ensure form structure consistency and support for multiple choice and open-text responses.",
+        "testStrategy": "Test form integration and submission handling.",
+        "priority": "medium",
+        "dependencies": [
+          22
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 24,
+        "title": "Implement User Onboarding",
+        "description": "Develop functionality for bulk uploading coachees and automated welcome emails.",
+        "details": "Use n8n for email triggers. Validate coachee data and prevent duplicate emails.",
+        "testStrategy": "Verify onboarding workflow and email delivery.",
+        "priority": "medium",
+        "dependencies": [
+          21
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 25,
+        "title": "Develop Nomination and Peer Assessment Workflow",
+        "description": "Create the workflow for coachees to nominate peers and for nominees to provide feedback.",
+        "details": "Implement nomination form validation and automated invite emails via n8n.",
+        "testStrategy": "Test nomination workflow and nominee access.",
+        "priority": "medium",
+        "dependencies": [
+          24
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 26,
+        "title": "Implement Data Capture and Storage",
+        "description": "Store assessment responses in Supabase and route data to Google Sheets for calculation.",
+        "details": "Use n8n webhooks to route form submissions. Normalize data and link to user/assessment IDs.",
+        "testStrategy": "Verify data integrity and routing.",
+        "priority": "medium",
+        "dependencies": [
+          25
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 27,
+        "title": "Develop Scoring and Aggregation Logic",
+        "description": "Reuse existing scoring formulas in Google Sheets to calculate competency scores.",
+        "details": "Map qualitative responses to themes. Ensure sheet structure supports per-coachee analysis.",
+        "testStrategy": "Test scoring logic and data aggregation.",
+        "priority": "medium",
+        "dependencies": [
+          26
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 28,
+        "title": "Implement AI Summary Generation",
+        "description": "Integrate AI API for generating summaries of qualitative feedback.",
+        "details": "Use OpenAI or similar services. Manage AI prompts at the Google Sheets level.",
+        "testStrategy": "Verify AI summary quality and integration.",
+        "priority": "low",
+        "dependencies": [
+          27
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 29,
+        "title": "Develop Admin Dashboard",
+        "description": "Create a central dashboard for admins to track assessments and manage workflows.",
+        "details": "Implement real-time status updates, coachee management, and report generation features.\n<info added on 2025-10-13T10:23:17.852Z>\nCompleted core admin dashboard UI:\n- Admin dashboard accessible at /admin/dashboard\n- Persistent white navbar with profile dropdown\n- Left sidebar featuring \"Manage Assessments\" section\n- Main content area prepared for future functionality (currently displays placeholder)\n- Clean, minimalist design consistent with user portal\n- Protected route requiring admin authentication\n- Integrated logout functionality\n\nNext steps: Populate the \"Manage Assessments\" section with features to view and manage coachees, track assessment progress, and send reminders.\n</info added on 2025-10-13T10:23:17.852Z>",
+        "testStrategy": "Test dashboard functionality and data accuracy.",
+        "priority": "medium",
+        "dependencies": [
+          22
+        ],
+        "status": "in-progress",
+        "subtasks": []
+      },
+      {
+        "id": 30,
+        "title": "Implement Reminder System",
+        "description": "Develop a system for sending reminders to coachees and nominees.",
+        "details": "Use n8n for automated and manual reminders. Track reminder history.",
+        "testStrategy": "Verify reminder delivery and tracking.",
+        "priority": "low",
+        "dependencies": [
+          29
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 31,
+        "title": "Develop Notification System",
+        "description": "Implement email notifications for various events using n8n workflows.",
+        "details": "Create templates for welcome emails, self-assessment invites, nominee invites, and report ready notifications.",
+        "testStrategy": "Test notification delivery and content.",
+        "priority": "medium",
+        "dependencies": [
+          21
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 32,
+        "title": "Implement Report Generation",
+        "description": "Develop a system to generate reports using Carbone API and Google Sheets data.",
+        "details": "Orchestrate report workflow with n8n. Include overall scores, competency breakdowns, and qualitative feedback summaries.",
+        "testStrategy": "Verify report generation speed and accuracy.",
+        "priority": "medium",
+        "dependencies": [
+          27
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 33,
+        "title": "Implement Data Export Feature",
+        "description": "Allow admins to export raw data to CSV.",
+        "details": "Provide options for exporting specific or aggregate data. Ensure PII protection.",
+        "testStrategy": "Test export functionality and data integrity.",
+        "priority": "low",
+        "dependencies": [
+          32
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 34,
+        "title": "Ensure Data Security and Privacy",
+        "description": "Implement encryption, RLS policies, and secure token-based links for nominees.",
+        "details": "Use Supabase RLS for access control. Ensure GDPR/CCPA compliance.",
+        "testStrategy": "Conduct penetration testing and verify RLS enforcement.",
+        "priority": "high",
+        "dependencies": [
+          20
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 35,
+        "title": "Conduct End-to-End Testing",
+        "description": "Perform comprehensive testing of all workflows and features.",
+        "details": "Test user journeys, data integrity, and system performance.",
+        "testStrategy": "Use a combination of automated and manual testing.",
+        "priority": "high",
+        "dependencies": [
+          34
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 36,
+        "title": "Deploy to Production",
+        "description": "Deploy the application to a production environment.",
+        "details": "Use CI/CD pipelines like GitHub Actions or Vercel. Ensure monitoring and logging.",
+        "testStrategy": "Verify deployment success and system uptime.",
+        "priority": "high",
+        "dependencies": [
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-10-13T09:54:42.034Z",
+      "updated": "2025-10-13T10:23:13.965Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
