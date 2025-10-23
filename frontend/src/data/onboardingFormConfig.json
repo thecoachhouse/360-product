@@ -1,0 +1,387 @@
+{
+  "title": "Turning Point_Onboarding Form",
+  "description": "Welcome to your Turning Point Coaching Journey!",
+  "showProgressBar": "top",
+  "progressBarType": "buttons",
+  "showQuestionNumbers": "on",
+  "questionsOnPageMode": "singlePage",
+  "completedHtml": "<h3>Thank you for your time!</h3><p>Your reflections help us tailor your coaching journey to support you meaningfully and personally.</p><p>If you think of anything else later, just reach out to Michaella: <a href=\"mailto:michaella@thecoachhouse.io\">michaella@thecoachhouse.io</a></p>",
+  "pages": [
+    {
+      "name": "welcome",
+      "title": "Turning Point Onboarding Form",
+      "description": "**Welcome to your Turning Point Coaching Journey!**\n\nBefore your journey begins, please take 5-10 minutes to complete this onboarding questionnaire - a short and very important step to ensuring your coaching journey is tailored to your needs and meets your expectations.\n\nYour responses will only be shared with your coach, and entirely kept confidential.",
+      "elements": []
+    },
+    {
+      "name": "contactDetails",
+      "title": "Your Contact Details",
+      "description": "Please provide your details so we can accurately connect them to your personal Turning Point coaching journey.",
+      "elements": [
+        {
+          "type": "text",
+          "name": "firstName",
+          "title": "First name",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "lastName",
+          "title": "Last name",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "email",
+          "title": "Email",
+          "isRequired": true,
+          "inputType": "email",
+          "validators": [
+            {
+              "type": "email"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "coachingStyle",
+      "title": "Your Coaching Style (1/6)",
+      "description": "This section helps us understand your learning style, so coaching feels natural, energising, and aligned with how you work.",
+      "elements": [
+        {
+          "type": "text",
+          "name": "learningStyle",
+          "title": "In a few words, how would you describe your **personal development or learning style**? (e.g. action-oriented, experiential/practical, collaborative, structured, creative, etc.)",
+          "isRequired": true
+        },
+        {
+          "type": "comment",
+          "name": "feedbackPreference",
+          "title": "How would you **prefer to receive feedback** during your coaching journey? (e.g. supportive, direct, structured, actionable, example-driven, etc.). _Optional_: share examples of what worked well in the past.",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "coachMatching",
+      "title": "Coach Matching (2/6)",
+      "description": "This section helps us match you with a coach whose energy and style will suit you best, based on what has or hasn't worked for you in the past, and what you're looking for in this next step.",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "workedWithCoachBefore",
+          "title": "Have you worked with a coach before?",
+          "isRequired": true,
+          "labelTrue": "Yes",
+          "labelFalse": "No"
+        },
+        {
+          "type": "comment",
+          "name": "whatWorkedWell",
+          "title": "**If yes, what worked well**? (e.g. pace, visible progress, safe environment, having an accountability partner)",
+          "visibleIf": "{workedWithCoachBefore} = true",
+          "isRequired": false
+        },
+        {
+          "type": "comment",
+          "name": "coachPreferences",
+          "title": "Do you have any **preferences for the type of coach** you'd like to work with? (e.g. gender identity, age, experience, cultural context)",
+          "isRequired": true
+        },
+        {
+          "type": "comment",
+          "name": "coachingApproach",
+          "title": "Some people thrive with direct and challenging coaches. Others prefer a gentler, more reflective space. **What works well for you**?",
+          "isRequired": true
+        },
+        {
+          "type": "checkbox",
+          "name": "personalityTraits",
+          "title": "Are there any **personality traits** in a coach that you find particularly helpful?",
+          "isRequired": true,
+          "minSelectedChoices": 1,
+          "maxSelectedChoices": 3,
+          "choices": [
+            {
+              "value": "curious",
+              "text": "Curious"
+            },
+            {
+              "value": "structured",
+              "text": "Structured"
+            },
+            {
+              "value": "warm",
+              "text": "Warm"
+            },
+            {
+              "value": "goodListener",
+              "text": "Good listener"
+            },
+            {
+              "value": "empathetic",
+              "text": "Empathetic"
+            },
+            {
+              "value": "direct",
+              "text": "Direct"
+            },
+            {
+              "value": "challenging",
+              "text": "Challenging"
+            },
+            {
+              "value": "pragmatic",
+              "text": "Pragmatic"
+            },
+            {
+              "value": "calm",
+              "text": "Calm"
+            }
+          ],
+          "showOtherItem": true,
+          "otherText": "Other (please specify)"
+        },
+        {
+          "type": "checkbox",
+          "name": "sensitiveTopics",
+          "title": "Are there any topics or areas that **feel sensitive** for you right now?",
+          "isRequired": true,
+          "minSelectedChoices": 1,
+          "maxSelectedChoices": 3,
+          "choices": [
+            {
+              "value": "financial",
+              "text": "Financial situation"
+            },
+            {
+              "value": "relationships",
+              "text": "Personal relationships"
+            },
+            {
+              "value": "grief",
+              "text": "Grief or loss"
+            },
+            {
+              "value": "health",
+              "text": "Health & wellness"
+            },
+            {
+              "value": "workplace",
+              "text": "Workplace dynamics"
+            },
+            {
+              "value": "leadership",
+              "text": "Leadership or performance pressure"
+            },
+            {
+              "value": "identity",
+              "text": "Identity or purpose"
+            },
+            {
+              "value": "family",
+              "text": "Family responsibilities"
+            },
+            {
+              "value": "burnout",
+              "text": "Burnout or emotional exhaustion"
+            }
+          ],
+          "showOtherItem": true,
+          "otherText": "Other (please specify)"
+        },
+        {
+          "type": "comment",
+          "name": "additionalPreferences",
+          "title": "Is there **anything else** you'd like to share related to your coaching preferences?",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "coachingGoals",
+      "title": "Coaching Goals (3/6)",
+      "description": "These questions help you and your coach start strong, with clarity.\n\n**Formal coaching goals will be set in collaboration with your coach**, using the results from your Turning Point Assessment, and through discussion of any current challenges you might be experiencing. For now, this is an opportunity to consider and name what feels important right now.",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "supportAreas",
+          "title": "Are there any **areas you already know you'd like support with**? (Choose up to 5)",
+          "isRequired": true,
+          "minSelectedChoices": 1,
+          "maxSelectedChoices": 5,
+          "choices": [
+            {
+              "value": "strategicThinking",
+              "text": "Strategic Thinking"
+            },
+            {
+              "value": "leadingOthers",
+              "text": "Leading Others"
+            },
+            {
+              "value": "leadershipPresence",
+              "text": "Leadership Presence & Influence"
+            },
+            {
+              "value": "collaboration",
+              "text": "Collaboration"
+            },
+            {
+              "value": "decisionMaking",
+              "text": "Decision-Making"
+            },
+            {
+              "value": "communication",
+              "text": "Communication"
+            },
+            {
+              "value": "resilience",
+              "text": "Resilience & Adaptability"
+            },
+            {
+              "value": "growthMindset",
+              "text": "Growth Mindset"
+            },
+            {
+              "value": "innovation",
+              "text": "Innovation"
+            },
+            {
+              "value": "emotionalIntelligence",
+              "text": "Emotional Intelligence & Empathy"
+            },
+            {
+              "value": "stressManagement",
+              "text": "Stress Management & Well-Being"
+            },
+            {
+              "value": "empoweringOthers",
+              "text": "Empowering Others"
+            }
+          ],
+          "showOtherItem": true,
+          "otherText": "Other (please specify)"
+        },
+        {
+          "type": "comment",
+          "name": "currentChallenges",
+          "title": "Would you like to share **anything you're navigating in this current moment** that you'd like to address in your coaching conversations? This can be work-related or personal.",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "measuringSuccess",
+      "title": "Measuring Success (4/6)",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "successCriteria",
+          "title": "What would make this coaching journey a success for you? (Choose up to 3)",
+          "isRequired": true,
+          "minSelectedChoices": 1,
+          "maxSelectedChoices": 3,
+          "choices": [
+            {
+              "value": "clarityInRole",
+              "text": "Gaining clarity in my role"
+            },
+            {
+              "value": "confidence",
+              "text": "Growing confidence and leadership presence"
+            },
+            {
+              "value": "decisionMaking",
+              "text": "Strengthening decision-making"
+            },
+            {
+              "value": "navigatingChange",
+              "text": "Navigating change or transition effectively"
+            },
+            {
+              "value": "workRelationships",
+              "text": "Improving work relationships"
+            },
+            {
+              "value": "teamDynamics",
+              "text": "Enhancing team dynamics"
+            },
+            {
+              "value": "workLifeBalance",
+              "text": "Improving work-life balance"
+            },
+            {
+              "value": "emotionalAwareness",
+              "text": "Building emotional awareness"
+            },
+            {
+              "value": "boldDecisions",
+              "text": "Making bold or tough decisions"
+            }
+          ],
+          "showOtherItem": true,
+          "otherText": "Other (please specify)"
+        }
+      ]
+    },
+    {
+      "name": "assessmentNominations",
+      "title": "Turning Point 360 Assessment Nominations (5/6)",
+      "description": "The Coach House's **Turning Point Assessment tracks your growth across 12 key competencies** in relation to change and transition.\n\nThe results from this assessment will be available ahead of your coaching journey, and **you'll work with your coach to identify areas of focus**. We'll conduct the assessment again at the end of your coaching journey for a comparative view of your growth.\n\nThe assessment gives you the opportunity to self-reflect, and to **ask others to provide feedback on their experience of you**. This 360-degree approach ensures a **well-rounded understanding of your strengths and areas for development** in relation to transition, driving both personal and organisational growth.\n\nIn order to prepare for the assessment, **please nominate individuals from each respondent category** (Peers, Direct Reports, Senior Leaders).\n\n_**Important: To make the most of this process, choose a variety of people that will ensure fair, honest and unbiased results (ie don't only select people you know will give you positive feedback - you want the constructive feedback too!).**_\n\n- **Peer**: A colleague at the _**same organisational level**_ to you\n- **Direct Report**: A team member who _**reports to you**_ (directly or indirectly)\n- **Senior Leader**: Someone _**you report to**_ (directly or indirectly), or someone more senior to you",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "peers",
+          "title": "Please list 3-5 Peers (names and surnames):",
+          "isRequired": true,
+          "rows": 4
+        },
+        {
+          "type": "comment",
+          "name": "directReports",
+          "title": "Please list 3-5 Direct Reports (names and surnames):",
+          "isRequired": true,
+          "rows": 4
+        },
+        {
+          "type": "comment",
+          "name": "seniorLeaders",
+          "title": "Please list 1-3 Senior Leaders (names and surnames):",
+          "isRequired": true,
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "finalReflections",
+      "title": "Final Reflections (6/6)",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "finalThoughts",
+          "title": "Are there **any final thoughts** you'd like your coach to know before you begin? This could include context about your team, your role, recent changes, or anything personal you feel might shape your coaching journey.",
+          "isRequired": true,
+          "rows": 6
+        }
+      ]
+    },
+    {
+      "name": "coachingAgreement",
+      "title": "Coaching Agreement",
+      "description": "This agreement outlines the terms and conditions of the coaching partnership between you as the coachee, and your coach.\n\n**We agree that:**\n\n**1. Purpose:** Coaching is an ongoing partnership focused on the coachee's personal and professional growth. Both coach and coachee will work together to identify and achieve the coachee's goals.\n\n**2. Nature of Coaching:** Coaching is a collaborative process aimed at helping the coachee realise their potential, address their aspirations, areas for development, and challenges in both personal and professional contexts. It is a positive, forward-looking approach distinct from therapy, counselling, or advice-giving. The coach is not acting as a licensed mental health professional.\n\n**3. Confidentiality:** Coaching is a confidential relationship. The coach agrees to keep all information confidential, except where required by law or for safety reasons. Any broader sharing of information will be discussed and agreed upon with the coachee.\n\n**4. Commitment:** Coaching is most effective when both parties are honest and straightforward in their communication. The coachee agrees to prepare for each session, be punctual, and actively participate. Follow-up actions agreed upon in sessions should be completed within the agreed timeframe.\n\n**5. Process:** Coaching can involve brainstorming, values clarification, goal setting, action plans, accountability, and lifestyle examination. Sessions will be scheduled regularly as per the coaching engagement and can be terminated by either party at any time.\n\n**6. Sessions:** The coach and coachee agree to meet for the number of sessions outlined in the coaching engagement, with each session lasting 60 minutes. Scheduling is a joint responsibility.\n\n**7. Cancellations:** Life can be unpredictable, and things may come up that require rescheduling a session. If either party needs to cancel an appointment, they agree to do so with at least 24 hours' notice. Sessions cancelled within 24 hours will be billed for. The cancelling party is responsible for rescheduling the session at a mutually convenient time.\n\n**8. Responsibility:** The coachee agrees to take responsibility for their own development and performance, prepare for each session, and participate actively. They understand that the coach does not have all the answers but will work with them to explore and identify ways forward.\n\n**9. Evaluation:** The coachee agrees to complete all evaluation forms during and after the final session to help assess the effectiveness of the coaching.\n\n**10. Changes:** Any agreed changes to the coaching engagement will be implemented promptly to ensure continued alignment with the coachee's goals.\n\n**11. Termination:** Either party can request termination of the agreement if there is a breakdown in the relationship, inadequate commitment, or lack of progress.",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "agreementAcceptance",
+          "title": "**I acknowledge that I have read and agree to the terms and conditions of this Coaching Agreement.**",
+          "isRequired": true,
+          "labelTrue": "I agree",
+          "labelFalse": "I do not agree"
+        }
+      ]
+    }
+  ]
+}
+

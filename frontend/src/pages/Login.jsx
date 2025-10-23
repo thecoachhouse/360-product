@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase, isAdmin } from '../supabaseClient';
 import './Login.css';
 
@@ -47,6 +48,33 @@ function Login({ onLogin }) {
 
   return (
     <div className="login-container">
+      <Link 
+        to="/user/login"
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          padding: '8px 16px',
+          backgroundColor: '#fff',
+          color: '#0d6efd',
+          textDecoration: 'none',
+          borderRadius: '6px',
+          border: '1px solid #0d6efd',
+          fontSize: '14px',
+          fontWeight: '500',
+          transition: 'all 0.2s',
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = '#0d6efd';
+          e.target.style.color = '#fff';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = '#fff';
+          e.target.style.color = '#0d6efd';
+        }}
+      >
+        User Login
+      </Link>
       <div className="login-box">
         <h1 className="login-title">Turning Point 360</h1>
         <p className="login-subtitle">Admin Portal</p>
