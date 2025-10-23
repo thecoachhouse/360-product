@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase, isAdmin } from './supabaseClient';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import UserLogin from './pages/UserLogin';
@@ -8,24 +9,98 @@ import AssessmentPage from './pages/AssessmentPage';
 import './App.css';
 
 function App() {
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [session, setSession] = useState(null);
+  const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleAdminLogin = () => {
-    setIsAdminAuthenticated(true);
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user || null);
+      setUserRole(session?.user?.user_metadata?.role || null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes (this handles magic link redirects)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('🔐 Auth state changed:', event);
+      console.log('📧 User email:', session?.user?.email);
+      console.log('👤 User role:', session?.user?.user_metadata?.role);
+      console.log('🎫 Session exists:', !!session);
+      
+      setSession(session);
+      setUser(session?.user || null);
+      setUserRole(session?.user?.user_metadata?.role || null);
+      setLoading(false);
+
+      // Handle magic link sign in
+      if (event === 'SIGNED_IN' && session) {
+        console.log('✅ User successfully signed in via magic link!');
+      }
+
+      // Log if there's an error
+      if (event === 'SIGNED_OUT') {
+        console.log('🚪 User signed out');
+      }
+
+      if (event === 'TOKEN_REFRESHED') {
+        console.log('🔄 Token refreshed');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleAdminLogin = (user) => {
+    setUser(user);
+    setUserRole(user?.user_metadata?.role);
   };
 
-  const handleAdminLogout = () => {
-    setIsAdminAuthenticated(false);
+  const handleAdminLogout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    setUser(null);
+    setUserRole(null);
   };
 
-  const handleUserLogin = () => {
-    setIsUserAuthenticated(true);
+  const handleUserLogout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    setUser(null);
+    setUserRole(null);
   };
 
-  const handleUserLogout = () => {
-    setIsUserAuthenticated(false);
-  };
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: '4px solid #e9ecef',
+            borderTopColor: '#0d6efd',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 16px'
+          }}></div>
+          <p style={{ color: '#6c757d' }}>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check authentication states
+  const isAdminAuthenticated = session && userRole === 'admin';
+  const isUserAuthenticated = session && userRole !== 'admin'; // Any authenticated user who is not admin
 
   return (
     <Router>
@@ -59,7 +134,7 @@ function App() {
             isUserAuthenticated ? (
               <Navigate to="/user/dashboard" replace />
             ) : (
-              <UserLogin onLogin={handleUserLogin} />
+              <UserLogin />
             )
           } 
         />

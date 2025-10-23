@@ -23,3 +23,7 @@ node_modules/
 
 # OS specific
 .DS_Store
+
+# SSH keys (never commit private keys!)
+tch
+tch.pub

@@ -1,15 +1,47 @@
 import { useState } from 'react';
+import { supabase, isAdmin } from '../supabaseClient';
 import './Login.css';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Temporary login - just check if fields are filled
-    if (email && password) {
-      onLogin();
+    setError('');
+    setLoading(true);
+
+    try {
+      // Authenticate with Supabase
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (authError) {
+        setError(authError.message);
+        setLoading(false);
+        return;
+      }
+
+      // Check if user has admin role
+      if (!isAdmin(data.user)) {
+        setError('Access denied. Admin privileges required.');
+        // Sign out non-admin user
+        await supabase.auth.signOut();
+        setLoading(false);
+        return;
+      }
+
+      // Success - user is authenticated and is an admin
+      setLoading(false);
+      onLogin(data.user);
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('An unexpected error occurred. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -41,11 +73,26 @@ function Login({ onLogin }) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
+              disabled={loading}
             />
           </div>
+
+          {error && (
+            <div style={{
+              padding: '12px',
+              backgroundColor: '#fee',
+              border: '1px solid #fcc',
+              borderRadius: '6px',
+              color: '#c33',
+              fontSize: '14px',
+              marginTop: '8px'
+            }}>
+              {error}
+            </div>
+          )}
           
-          <button type="submit" className="login-button">
-            Sign In
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
       </div>
