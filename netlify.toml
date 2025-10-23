@@ -2,11 +2,11 @@
   base = "frontend"
   command = "npm run build"
   publish = "dist"
-  environment = { NODE_VERSION = "20" }
 
 # Disable secrets scanning for this frontend app
 # Supabase credentials are client-side and protected by RLS policies
 [build.environment]
+  NODE_VERSION = "20"
   SECRETS_SCAN_ENABLED = "false"
 
 # Redirect all routes to index.html for client-side routing
