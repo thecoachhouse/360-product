@@ -2,6 +2,12 @@
   base = "frontend"
   command = "npm run build"
   publish = "dist"
+  environment = { NODE_VERSION = "20" }
+
+# These environment variables are meant to be public (client-side)
+# Supabase security relies on RLS policies, not hiding these keys
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
 
 # Redirect all routes to index.html for client-side routing
 [[redirects]]
