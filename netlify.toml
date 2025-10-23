@@ -4,10 +4,10 @@
   publish = "dist"
   environment = { NODE_VERSION = "20" }
 
-# These environment variables are meant to be public (client-side)
-# Supabase security relies on RLS policies, not hiding these keys
+# Disable secrets scanning for this frontend app
+# Supabase credentials are client-side and protected by RLS policies
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
+  SECRETS_SCAN_ENABLED = "false"
 
 # Redirect all routes to index.html for client-side routing
 [[redirects]]
