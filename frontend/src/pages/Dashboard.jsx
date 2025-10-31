@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar';
 import ClientManagement from './ClientManagement';
 import ProgrammeManagement from './ProgrammeManagement';
 import AssessmentBuilder from './AssessmentBuilder';
+import PendingNominations from '../components/PendingNominations';
 import './Dashboard.css';
 
 function Dashboard({ onLogout }) {
@@ -108,6 +109,13 @@ function Dashboard({ onLogout }) {
           <AssessmentBuilder 
             selectedProgramme={selectedProgramme}
             onBack={handleBackFromBuilder}
+          />
+        );
+      
+      case 'pending-nominations':
+        return (
+          <PendingNominations 
+            selectedProgramme={selectedProgramme}
           />
         );
       

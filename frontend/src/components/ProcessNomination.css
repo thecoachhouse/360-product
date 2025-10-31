@@ -1,0 +1,70 @@
+.process-nomination {
+  max-width: 600px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.radio-option:hover {
+  background-color: #f8f9fa;
+  border-color: #0d6efd;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-option span {
+  font-size: 15px;
+  color: #495057;
+}
+
+.readonly-input {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.selected-nominee-info {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #e7f3ff;
+  border: 1px solid #b3d7ff;
+  border-radius: 6px;
+}
+
+.selected-nominee-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.selected-nominee-info strong {
+  color: #0d6efd;
+}
+
+.field-hint {
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.action-group {
+  display: flex;
+  gap: 12px;
+}

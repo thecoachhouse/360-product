@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import UserLogin from './pages/UserLogin';
 import UserDashboard from './pages/UserDashboard';
+import CoacheeDashboard from './pages/CoacheeDashboard';
 import AssessmentPage from './pages/AssessmentPage';
 import './App.css';
 
@@ -143,6 +144,26 @@ function App() {
           element={
             isUserAuthenticated ? (
               <UserDashboard onLogout={handleUserLogout} />
+            ) : (
+              <Navigate to="/user/login" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/user/coachee/dashboard" 
+          element={
+            isUserAuthenticated ? (
+              <CoacheeDashboard onLogout={handleUserLogout} />
+            ) : (
+              <Navigate to="/user/login" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/user/assessment/:type/:id" 
+          element={
+            isUserAuthenticated ? (
+              <AssessmentPage onLogout={handleUserLogout} />
             ) : (
               <Navigate to="/user/login" replace />
             )

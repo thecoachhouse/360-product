@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import CoacheeManagement from '../components/CoacheeManagement';
 import './ClientManagement.css'; // Reuse same styles
 
 function ProgrammeManagement({ onNavigateToBuilder }) {
@@ -19,6 +20,7 @@ function ProgrammeManagement({ onNavigateToBuilder }) {
   const [peerJsonText, setPeerJsonText] = useState('');
   const [onboardingJsonText, setOnboardingJsonText] = useState('');
   const [savingTemplates, setSavingTemplates] = useState(false);
+  const [managingCoachees, setManagingCoachees] = useState(null);
   const [formData, setFormData] = useState({
     client_id: '',
     name: '',
@@ -555,6 +557,19 @@ function ProgrammeManagement({ onNavigateToBuilder }) {
                     <td className="cell-secondary">{formatDate(programme.created_at)}</td>
                     <td>
                       <div className="action-buttons">
+                        <button
+                          className="btn-icon"
+                          onClick={() => setManagingCoachees(programme)}
+                          title="Manage coachees"
+                          style={{ color: '#198754' }}
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                          </svg>
+                        </button>
                         {hasTemplates(programme) ? (
                           <button
                             className="btn-icon"
@@ -572,7 +587,7 @@ function ProgrammeManagement({ onNavigateToBuilder }) {
                             className="btn-icon"
                             onClick={() => handleBuildAssessment(programme)}
                             title="Build assessment"
-                            style={{ color: '#198754' }}
+                            style={{ color: '#0d6efd' }}
                           >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                               <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
@@ -886,6 +901,17 @@ function ProgrammeManagement({ onNavigateToBuilder }) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Coachee Management Modal */}
+      {managingCoachees && (
+        <CoacheeManagement
+          programme={managingCoachees}
+          onClose={() => setManagingCoachees(null)}
+          onUpdate={() => {
+            fetchProgrammes();
+          }}
+        />
       )}
     </div>
   );

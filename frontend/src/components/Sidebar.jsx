@@ -49,6 +49,16 @@ function Sidebar({ selectedSection, onSelectSection }) {
           <polyline points="2 12 12 17 22 12"></polyline>
         </svg>
       )
+    },
+    {
+      id: 'pending-nominations',
+      label: 'Pending Nominations',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      )
     }
   ];
 

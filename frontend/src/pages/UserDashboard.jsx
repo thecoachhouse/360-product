@@ -15,8 +15,92 @@ function UserDashboard({ onLogout }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchAssessments();
+    checkUserTypeAndFetch();
   }, []);
+
+  const checkUserTypeAndFetch = async () => {
+    try {
+      setLoading(true);
+      setError('');
+
+      // Get current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        navigate('/user/login');
+        return;
+      }
+
+      setUserEmail(user.email);
+
+      // First check if user is a coachee
+      // Normalize email to lowercase for case-insensitive matching
+      // Use maybeSingle() to avoid throwing error when no record found
+      const normalizedEmail = user.email?.toLowerCase().trim();
+      console.log('🔍 Checking if user is coachee with email:', normalizedEmail);
+      
+      // First, let's check if we can access the coachees table at all
+      const { data: allCoachees, error: allCoacheesError } = await supabase
+        .from('coachees')
+        .select('id, full_name, email, programme_id')
+        .limit(10);
+      
+      console.log('📋 All coachees in database (first 10):', allCoachees);
+      if (allCoacheesError) {
+        console.error('❌ Error fetching all coachees (possible RLS issue):', allCoacheesError);
+      }
+      
+      const { data: coacheeData, error: coacheeError } = await supabase
+        .from('coachees')
+        .select('id, full_name, email')
+        .eq('email', normalizedEmail)
+        .maybeSingle();
+
+      console.log('📊 Coachee query result for specific email:', { 
+        found: !!coacheeData, 
+        data: coacheeData, 
+        error: coacheeError,
+        searchedEmail: normalizedEmail
+      });
+      
+      // Check if there's a close match (for debugging)
+      if (!coacheeData && allCoachees) {
+        const matchingCoachee = allCoachees.find(c => 
+          c.email?.toLowerCase().trim() === normalizedEmail
+        );
+        if (matchingCoachee) {
+          console.log('✅ Found close match:', matchingCoachee);
+        } else {
+          console.log('⚠️ No exact match found. Available coachee emails:', 
+            allCoachees.map(c => c.email).join(', ')
+          );
+        }
+      }
+
+      // If user is a coachee, redirect to coachee dashboard
+      if (coacheeData && !coacheeError) {
+        console.log('✅ User is a coachee, redirecting to CoacheeDashboard');
+        navigate('/user/coachee/dashboard', { replace: true });
+        return;
+      }
+
+      // If there's an actual error (not just "not found"), log it
+      if (coacheeError && coacheeError.code !== 'PGRST116') {
+        console.error('❌ Error checking if user is coachee:', coacheeError);
+      } else if (!coacheeData) {
+        console.log('⚠️ No coachee record found for email:', normalizedEmail);
+        console.log('💡 Tip: Make sure the coachee was added in admin portal with the exact email');
+      }
+
+      // User is not a coachee (or coachee not found), continue as nominee
+      console.log('👤 User is a nominee, showing nominee dashboard');
+      fetchAssessments();
+    } catch (err) {
+      console.error('Error checking user type:', err);
+      // Continue with nominee flow if error
+      fetchAssessments();
+    }
+  };
 
   const fetchAssessments = async () => {
     try {

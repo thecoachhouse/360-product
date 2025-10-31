@@ -1,0 +1,148 @@
+.nominee-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-input {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.dropdown-input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.dropdown-input:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.dropdown-clear {
+  position: absolute;
+  right: 32px;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.dropdown-clear:hover {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.dropdown-toggle {
+  position: absolute;
+  right: 8px;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.dropdown-toggle:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.dropdown-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdown-loading,
+.dropdown-empty {
+  padding: 24px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.dropdown-empty-hint {
+  font-size: 13px;
+  color: #adb5bd;
+  margin-top: 4px;
+}
+
+.dropdown-list {
+  padding: 4px 0;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.selected {
+  background-color: #e7f3ff;
+  color: #0d6efd;
+}
+
+.nominee-item-name {
+  font-weight: 500;
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+.dropdown-item.selected .nominee-item-name {
+  color: #0d6efd;
+}
+
+.nominee-item-email {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.dropdown-item.selected .nominee-item-email {
+  color: #0d6efd;
+}
